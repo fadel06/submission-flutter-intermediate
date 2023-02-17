@@ -54,14 +54,14 @@ class AuthProvider extends ChangeNotifier {
     return userState;
   }
 
-  Future<void> register(String name, String email, String password) async {
+  Future<void> register(User user) async {
     try {
       message = "";
       commonResponse = null;
       isLoadingRegister = true;
       notifyListeners();
 
-      commonResponse = await apiService.register(name, email, password);
+      commonResponse = await apiService.register(user);
       message = commonResponse?.message ?? 'success';
       isLoadingRegister = false;
       notifyListeners();

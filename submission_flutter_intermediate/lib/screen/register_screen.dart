@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:submission_flutter_intermediate/data/response/common_response.dart';
 
 import '../model/user.dart';
 import '../provider/auth_provider.dart';
@@ -20,8 +23,8 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final emailController = TextEditingController();
-
   final passwordController = TextEditingController();
+  final nameController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
 
@@ -29,6 +32,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    nameController.dispose();
     super.dispose();
   }
 
@@ -47,6 +51,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                TextFormField(
+                  controller: nameController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your name.';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    hintText: "Name",
+                  ),
+                ),
+                const SizedBox(height: 8),
                 TextFormField(
                   controller: emailController,
                   validator: (value) {
@@ -80,12 +97,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         onPressed: () async {
                           if (formKey.currentState!.validate()) {
                             final User user = User(
+                              name: nameController.text,
                               email: emailController.text,
                               password: passwordController.text,
                             );
-                            final authRead = context.read<AuthProvider>();
-                            final result = await authRead.saveUser(user);
-                            if (result) widget.onRegister();
+                            await _onRegister(user);
+                            widget.onRegister();
                           }
                         },
                         child: const Text("REGISTER"),
@@ -101,5 +118,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  _onRegister(User user) async {
+    final ScaffoldMessengerState scaffoldMessengerState =
+        ScaffoldMessenger.of(context);
+    final authProvider = context.read<AuthProvider>();
+    await authProvider.register(user);
+    if (authProvider.commonResponse != null) {}
+    scaffoldMessengerState
+        .showSnackBar(SnackBar(content: Text(authProvider.message)));
   }
 }
