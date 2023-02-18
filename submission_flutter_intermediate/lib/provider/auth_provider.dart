@@ -3,7 +3,7 @@ import 'package:submission_flutter_intermediate/api/api_service.dart';
 import 'package:submission_flutter_intermediate/data/response/common_response.dart';
 import 'package:submission_flutter_intermediate/db/auth_repository.dart';
 
-import '../model/user.dart';
+import '../data/response/login_response.dart';
 
 class AuthProvider extends ChangeNotifier {
   final AuthRepository authRepository;
@@ -18,18 +18,37 @@ class AuthProvider extends ChangeNotifier {
 
   String message = "";
   CommonResponse? commonResponse;
+  LoginResponse? loginResponse;
 
-  Future<bool> login(User user) async {
-    isLoadingLogin = true;
-    notifyListeners();
-    final userState = await authRepository.getUser();
-    if (user == userState) {
-      await authRepository.login();
+  // Future<bool> login(User user) async {
+  //   isLoadingLogin = true;
+  //   notifyListeners();
+  //   final userState = await authRepository.getUser();
+  //   if (user == userState) {
+  //     await authRepository.login();
+  //   }
+  //   isLoggedIn = await authRepository.isLoggedIn();
+  //   isLoadingLogin = false;
+  //   notifyListeners();
+  //   return isLoggedIn;
+  // }
+
+  Future<void> login(String email, String password) async {
+    try {
+      isLoadingLogin = true;
+      loginResponse = null;
+      notifyListeners();
+
+      loginResponse = await apiService.login(email, password);
+      message = loginResponse?.message ?? 'success';
+      await authRepository.saveUser(loginResponse!.loginResult);
+      isLoadingLogin = false;
+      notifyListeners();
+    } catch (e) {
+      isLoadingLogin = false;
+      message = e.toString();
+      notifyListeners();
     }
-    isLoggedIn = await authRepository.isLoggedIn();
-    isLoadingLogin = false;
-    notifyListeners();
-    return isLoggedIn;
   }
 
   Future<bool> logout() async {

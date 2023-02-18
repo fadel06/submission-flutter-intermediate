@@ -1,10 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:submission_flutter_intermediate/data/response/common_response.dart';
 
-import '../model/user.dart';
 import '../provider/auth_provider.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -123,7 +119,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ScaffoldMessenger.of(context);
     final authProvider = context.read<AuthProvider>();
     await authProvider.register(name, email, password);
-    if (authProvider.commonResponse != null) {}
+    if (authProvider.commonResponse != null) {
+      widget.onRegister();
+    }
     scaffoldMessengerState
         .showSnackBar(SnackBar(content: Text(authProvider.message)));
   }

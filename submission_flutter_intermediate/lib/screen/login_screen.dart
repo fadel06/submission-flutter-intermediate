@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../model/user.dart';
 import '../provider/auth_provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -77,24 +76,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     : ElevatedButton(
                         onPressed: () async {
                           if (formKey.currentState!.validate()) {
-                            final scaffoldMessenger =
-                                ScaffoldMessenger.of(context);
-                            final User user = User(
-                              email: emailController.text,
-                              password: passwordController.text,
-                            );
-                            final authRead = context.read<AuthProvider>();
-                            final result = await authRead.login(user);
-                            if (result) {
-                              widget.onLogin();
-                            } else {
-                              scaffoldMessenger.showSnackBar(
-                                const SnackBar(
-                                  content:
-                                      Text("Your email or password is invalid"),
-                                ),
-                              );
-                            }
+                            var email = emailController.text;
+                            var password = passwordController.text;
+                            // if (result) {
+                            //   widget.onLogin();
+                            // } else {
+                            //   scaffoldMessenger.showSnackBar(
+                            //     const SnackBar(
+                            //       content:
+                            //           Text("Your email or password is invalid"),
+                            //     ),
+                            //   );
+                            // }
+                            _onLogin(email, password);
                           }
                         },
                         child: const Text("LOGIN"),
@@ -110,5 +104,17 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  _onLogin(String email, String password) async {
+    final ScaffoldMessengerState scaffoldMessengerState =
+        ScaffoldMessenger.of(context);
+    final authProvider = context.read<AuthProvider>();
+    await authProvider.login(email, password);
+    if (authProvider.loginResponse != null) {
+      widget.onLogin();
+    }
+    scaffoldMessengerState
+        .showSnackBar(SnackBar(content: Text(authProvider.message)));
   }
 }

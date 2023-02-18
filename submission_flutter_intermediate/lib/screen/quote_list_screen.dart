@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:submission_flutter_intermediate/db/auth_repository.dart';
 
 import '../model/quote.dart';
 import '../provider/auth_provider.dart';
@@ -22,17 +23,17 @@ class QuotesListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authWatch = context.watch<AuthProvider>();
+    final authRepository = AuthRepository();
+    final scaffoldMessengerState = ScaffoldMessenger.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Story App"),
         actions: [
           IconButton(
               onPressed: () async {
-                final scaffoldMessengerState = ScaffoldMessenger.of(context);
                 final pageManager = context.read<PageManager>();
                 toFormScreen();
                 final dataString = await pageManager.waitForResult();
-
                 scaffoldMessengerState.showSnackBar(
                   SnackBar(content: Text("My name is $dataString")),
                 );
@@ -47,7 +48,13 @@ class QuotesListScreen extends StatelessWidget {
               title: Text(quote.author),
               subtitle: Text(quote.quote),
               isThreeLine: true,
-              onTap: () => onTapped(quote.id),
+              onTap: () async {
+                var user = await authRepository.getUser();
+
+                scaffoldMessengerState
+                    .showSnackBar(SnackBar(content: Text(user!.name!)));
+                onTapped(quote.id);
+              },
             )
         ],
       ),
