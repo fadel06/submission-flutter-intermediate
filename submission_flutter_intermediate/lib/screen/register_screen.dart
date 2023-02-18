@@ -96,12 +96,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     : ElevatedButton(
                         onPressed: () async {
                           if (formKey.currentState!.validate()) {
-                            final User user = User(
-                              name: nameController.text,
-                              email: emailController.text,
-                              password: passwordController.text,
-                            );
-                            await _onRegister(user);
+                            var name = nameController.text;
+                            var email = emailController.text;
+                            var password = passwordController.text;
+                            await _onRegister(name, email, password);
                             widget.onRegister();
                           }
                         },
@@ -120,11 +118,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  _onRegister(User user) async {
+  _onRegister(String name, String email, String password) async {
     final ScaffoldMessengerState scaffoldMessengerState =
         ScaffoldMessenger.of(context);
     final authProvider = context.read<AuthProvider>();
-    await authProvider.register(user);
+    await authProvider.register(name, email, password);
     if (authProvider.commonResponse != null) {}
     scaffoldMessengerState
         .showSnackBar(SnackBar(content: Text(authProvider.message)));

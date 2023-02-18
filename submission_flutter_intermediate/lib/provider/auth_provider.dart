@@ -45,23 +45,14 @@ class AuthProvider extends ChangeNotifier {
     return !isLoggedIn;
   }
 
-  Future<bool> saveUser(User user) async {
-    isLoadingRegister = true;
-    notifyListeners();
-    final userState = await authRepository.saveUser(user);
-    isLoadingRegister = false;
-    notifyListeners();
-    return userState;
-  }
-
-  Future<void> register(User user) async {
+  Future<void> register(String name, String email, String password) async {
     try {
       message = "";
       commonResponse = null;
       isLoadingRegister = true;
       notifyListeners();
 
-      commonResponse = await apiService.register(user);
+      commonResponse = await apiService.register(name, email, password);
       message = commonResponse?.message ?? 'success';
       isLoadingRegister = false;
       notifyListeners();
