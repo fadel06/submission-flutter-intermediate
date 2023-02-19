@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:submission_flutter_intermediate/db/auth_repository.dart';
 import 'package:submission_flutter_intermediate/screen/form_screen.dart';
 
-import '../model/quote.dart';
 import '../screen/login_screen.dart';
 import '../screen/quote_detail_screen.dart';
-import '../screen/quote_list_screen.dart';
 import '../screen/register_screen.dart';
 import '../screen/splash_screen.dart';
+import '../screen/story_detail_screen.dart';
 import '../screen/story_list_screen.dart';
 
 class MyRouteDelegate extends RouterDelegate
@@ -26,7 +25,7 @@ class MyRouteDelegate extends RouterDelegate
     notifyListeners();
   }
 
-  String? selectedQuote;
+  String? selectedStory;
   List<Page> historyStack = [];
   bool? isLoggedIn;
   bool? isRegister = false;
@@ -49,7 +48,7 @@ class MyRouteDelegate extends RouterDelegate
         }
 
         isRegister = false;
-        selectedQuote = null;
+        selectedStory = null;
         isForm = false;
         notifyListeners();
         return true;
@@ -102,13 +101,19 @@ class MyRouteDelegate extends RouterDelegate
           ),
       ];
   List<Page> get _loggedInStack => [
-        const MaterialPage(
-            key: ValueKey("StoryListScreen"), child: StoryListScreen()),
-        if (selectedQuote != null)
+        MaterialPage(
+            key: const ValueKey("StoryListScreen"),
+            child: StoryListScreen(
+              onTapped: (String storyId) {
+                selectedStory = storyId;
+                notifyListeners();
+              },
+            )),
+        if (selectedStory != null)
           MaterialPage(
-            key: ValueKey(selectedQuote),
-            child: QuoteDetailsScreen(
-              quoteId: selectedQuote!,
+            key: ValueKey(selectedStory),
+            child: StoryDetailScreen(
+              storyId: selectedStory!,
             ),
           ),
         if (isForm)

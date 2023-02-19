@@ -3,10 +3,14 @@ import 'dart:io';
 import 'package:submission_flutter_intermediate/data/response/common_response.dart';
 import 'package:http/http.dart' as http;
 import 'package:submission_flutter_intermediate/data/response/login_response.dart';
+import 'package:submission_flutter_intermediate/data/response/story_detail_response.dart';
 import 'package:submission_flutter_intermediate/data/response/story_response.dart';
+import 'package:submission_flutter_intermediate/db/auth_repository.dart';
 
 class ApiService {
   static const String _baseUrl = 'https://story-api.dicoding.dev/v1';
+
+  final AuthRepository authRepository = AuthRepository();
 
   Future<CommonResponse> register(
       String name, String email, String password) async {
@@ -45,19 +49,31 @@ class ApiService {
     }
   }
 
-  Future<StoryResponse> fetchStories(String token) async {
+  Future<StoryResponse> fetchStories() async {
     final endPointUri = Uri.parse('$_baseUrl/stories');
-    // final Map<String, String> headers = {
-    //   "Authorization": "Bearer $token",
-    // };
-
+    final user = await authRepository.getUser();
     final response = await http.get(endPointUri,
-        headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
+        headers: {HttpHeaders.authorizationHeader: "Bearer ${user!.token}"});
 
     if (response.statusCode == 200) {
       return storyResponseFromJson(response.body);
     } else {
       final StoryResponse storyResponse = storyResponseFromJson(response.body);
+      throw Exception(storyResponse.message);
+    }
+  }
+
+  Future<StoryDetailResponse> fetchStoryDetail(String id) async {
+    final endPointUri = Uri.parse('$_baseUrl/stories/$id');
+    final user = await authRepository.getUser();
+    final response = await http.get(endPointUri,
+        headers: {HttpHeaders.authorizationHeader: "Bearer ${user!.token}"});
+
+    if (response.statusCode == 200) {
+      return storyDetailResponseFromJson(response.body);
+    } else {
+      final StoryDetailResponse storyResponse =
+          storyDetailResponseFromJson(response.body);
       throw Exception(storyResponse.message);
     }
   }

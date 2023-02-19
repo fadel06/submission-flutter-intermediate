@@ -41,8 +41,7 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(create: (context) => PageManager()),
         ChangeNotifierProvider(
-            create: (context) => StoryListProvider(
-                authRepository: authRepository, apiService: ApiService()))
+            create: (context) => StoryListProvider(apiService: ApiService()))
       ],
       child: MaterialApp(
         title: 'Story App',

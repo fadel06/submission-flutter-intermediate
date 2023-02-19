@@ -8,14 +8,11 @@ import 'package:submission_flutter_intermediate/screen/widgets/story_card.dart';
 
 import '../utils/constant.dart';
 
-class StoryListScreen extends StatefulWidget {
-  const StoryListScreen({super.key});
+class StoryListScreen extends StatelessWidget {
+  final Function(String) onTapped;
 
-  @override
-  State<StoryListScreen> createState() => _StoryListScreenState();
-}
+  const StoryListScreen({Key? key, required this.onTapped}) : super(key: key);
 
-class _StoryListScreenState extends State<StoryListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,8 +29,13 @@ class _StoryListScreenState extends State<StoryListScreen> {
           return ListView.builder(
               itemCount: stories.length,
               itemBuilder: (context, index) {
-                return StoryCard(
-                  story: stories[index],
+                return GestureDetector(
+                  onTap: () async {
+                    onTapped(stories[index].id);
+                  },
+                  child: StoryCard(
+                    story: stories[index],
+                  ),
                 );
               });
         }

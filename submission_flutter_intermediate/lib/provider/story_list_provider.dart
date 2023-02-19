@@ -7,9 +7,8 @@ import '../utils/constant.dart';
 
 class StoryListProvider extends ChangeNotifier {
   final ApiService apiService;
-  final AuthRepository authRepository;
 
-  StoryListProvider({required this.authRepository, required this.apiService}) {
+  StoryListProvider({required this.apiService}) {
     _fetchStories();
   }
 
@@ -27,9 +26,7 @@ class StoryListProvider extends ChangeNotifier {
       _state = ResultState.loading;
       notifyListeners();
 
-      final user = await authRepository.getUser();
-
-      final response = await apiService.fetchStories(user!.token!);
+      final response = await apiService.fetchStories();
       if (response.listStory.isNotEmpty) {
         _state = ResultState.hasData;
         _storyResponse = response;
