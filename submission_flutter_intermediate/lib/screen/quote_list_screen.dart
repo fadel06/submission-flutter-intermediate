@@ -6,13 +6,13 @@ import '../model/quote.dart';
 import '../provider/auth_provider.dart';
 import '../routes/page_manager.dart';
 
-class QuotesListScreen extends StatelessWidget {
+class QuoteListScreen extends StatelessWidget {
   final List<Quote> quotes;
   final Function(String) onTapped;
   final Function() toFormScreen;
   final Function() onLogout;
 
-  const QuotesListScreen({
+  const QuoteListScreen({
     Key? key,
     required this.quotes,
     required this.onTapped,
@@ -49,10 +49,6 @@ class QuotesListScreen extends StatelessWidget {
               subtitle: Text(quote.quote),
               isThreeLine: true,
               onTap: () async {
-                var user = await authRepository.getUser();
-
-                scaffoldMessengerState
-                    .showSnackBar(SnackBar(content: Text(user!.name!)));
                 onTapped(quote.id);
               },
             )

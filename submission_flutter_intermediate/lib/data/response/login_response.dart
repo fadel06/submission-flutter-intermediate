@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../model/login_result.dart';
+import '../model/user.dart';
 
 LoginResponse loginResponseFromJson(String str) =>
     LoginResponse.fromJson(json.decode(str));
@@ -16,12 +16,12 @@ class LoginResponse {
 
   bool error;
   String message;
-  LoginResult loginResult;
+  User loginResult;
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) => LoginResponse(
         error: json["error"],
         message: json["message"],
-        loginResult: LoginResult.fromJson(jsonEncode(json["loginResult"])),
+        loginResult: User.fromJson(jsonEncode(json["loginResult"])),
       );
 
   Map<String, dynamic> toJson() => {

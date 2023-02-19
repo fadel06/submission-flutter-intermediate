@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:submission_flutter_intermediate/api/api_service.dart';
 import 'package:submission_flutter_intermediate/db/auth_repository.dart';
 import 'package:submission_flutter_intermediate/provider/auth_provider.dart';
+import 'package:submission_flutter_intermediate/provider/story_list_provider.dart';
 import 'package:submission_flutter_intermediate/routes/page_manager.dart';
 import 'package:submission_flutter_intermediate/routes/route_delegate.dart';
 
@@ -20,11 +21,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late MyRouteDelegate myRouteDelegate;
   late AuthProvider authProvider;
+  final authRepository = AuthRepository();
 
   @override
   void initState() {
     super.initState();
-    final authRepository = AuthRepository();
 
     authProvider = AuthProvider(authRepository, ApiService());
 
@@ -38,7 +39,10 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (context) => authProvider,
         ),
-        ChangeNotifierProvider(create: (context) => PageManager())
+        ChangeNotifierProvider(create: (context) => PageManager()),
+        ChangeNotifierProvider(
+            create: (context) => StoryListProvider(
+                authRepository: authRepository, apiService: ApiService()))
       ],
       child: MaterialApp(
         title: 'Story App',

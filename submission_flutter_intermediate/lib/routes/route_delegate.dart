@@ -8,6 +8,7 @@ import '../screen/quote_detail_screen.dart';
 import '../screen/quote_list_screen.dart';
 import '../screen/register_screen.dart';
 import '../screen/splash_screen.dart';
+import '../screen/story_list_screen.dart';
 
 class MyRouteDelegate extends RouterDelegate
     with ChangeNotifier, PopNavigatorRouterDelegateMixin {
@@ -101,24 +102,8 @@ class MyRouteDelegate extends RouterDelegate
           ),
       ];
   List<Page> get _loggedInStack => [
-        MaterialPage(
-          key: const ValueKey("QuotesListPage"),
-          child: QuotesListScreen(
-            quotes: quotes,
-            onTapped: (String quoteId) {
-              selectedQuote = quoteId;
-              notifyListeners();
-            },
-            onLogout: () {
-              isLoggedIn = false;
-              notifyListeners();
-            },
-            toFormScreen: () {
-              isForm = true;
-              notifyListeners();
-            },
-          ),
-        ),
+        const MaterialPage(
+            key: ValueKey("StoryListScreen"), child: StoryListScreen()),
         if (selectedQuote != null)
           MaterialPage(
             key: ValueKey(selectedQuote),
@@ -137,4 +122,41 @@ class MyRouteDelegate extends RouterDelegate
             ),
           ),
       ];
+  // List<Page> get _loggedInStack => [
+  //       MaterialPage(
+  //         key: const ValueKey("QuotesListPage"),
+  //         child: QuoteListScreen(
+  //           quotes: quotes,
+  //           onTapped: (String quoteId) {
+  //             selectedQuote = quoteId;
+  //             notifyListeners();
+  //           },
+  //           onLogout: () {
+  //             isLoggedIn = false;
+  //             notifyListeners();
+  //           },
+  //           toFormScreen: () {
+  //             isForm = true;
+  //             notifyListeners();
+  //           },
+  //         ),
+  //       ),
+  //       if (selectedQuote != null)
+  //         MaterialPage(
+  //           key: ValueKey(selectedQuote),
+  //           child: QuoteDetailsScreen(
+  //             quoteId: selectedQuote!,
+  //           ),
+  //         ),
+  //       if (isForm)
+  //         MaterialPage(
+  //           key: const ValueKey("FormScreen"),
+  //           child: FormScreen(
+  //             onSend: () {
+  //               isForm = false;
+  //               notifyListeners();
+  //             },
+  //           ),
+  //         ),
+  //     ];
 }

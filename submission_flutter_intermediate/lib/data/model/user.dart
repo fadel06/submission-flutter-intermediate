@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-class LoginResult {
-  LoginResult({
+class User {
+  User({
     required this.userId,
     required this.name,
     required this.token,
@@ -37,8 +37,8 @@ class LoginResult {
     };
   }
 
-  factory LoginResult.fromMap(Map<String, dynamic> map) {
-    return LoginResult(
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
       userId: map['userId'],
       name: map['name'],
       token: map['token'],
@@ -47,6 +47,5 @@ class LoginResult {
 
   String toJson() => json.encode(toMap());
 
-  factory LoginResult.fromJson(String source) =>
-      LoginResult.fromMap(json.decode(source));
+  factory User.fromJson(String source) => User.fromMap(json.decode(source));
 }
