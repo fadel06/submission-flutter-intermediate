@@ -20,19 +20,6 @@ class AuthProvider extends ChangeNotifier {
   CommonResponse? commonResponse;
   LoginResponse? loginResponse;
 
-  // Future<bool> login(User user) async {
-  //   isLoadingLogin = true;
-  //   notifyListeners();
-  //   final userState = await authRepository.getUser();
-  //   if (user == userState) {
-  //     await authRepository.login();
-  //   }
-  //   isLoggedIn = await authRepository.isLoggedIn();
-  //   isLoadingLogin = false;
-  //   notifyListeners();
-  //   return isLoggedIn;
-  // }
-
   Future<void> login(String email, String password) async {
     try {
       isLoadingLogin = true;
@@ -42,6 +29,7 @@ class AuthProvider extends ChangeNotifier {
       loginResponse = await apiService.login(email, password);
       message = loginResponse?.message ?? 'success';
       await authRepository.saveUser(loginResponse!.loginResult);
+      await authRepository.login();
       isLoadingLogin = false;
       notifyListeners();
     } catch (e) {

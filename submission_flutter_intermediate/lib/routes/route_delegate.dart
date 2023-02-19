@@ -3,7 +3,6 @@ import 'package:submission_flutter_intermediate/db/auth_repository.dart';
 import 'package:submission_flutter_intermediate/screen/form_screen.dart';
 
 import '../screen/login_screen.dart';
-import '../screen/quote_detail_screen.dart';
 import '../screen/register_screen.dart';
 import '../screen/splash_screen.dart';
 import '../screen/story_detail_screen.dart';
@@ -106,6 +105,14 @@ class MyRouteDelegate extends RouterDelegate
             child: StoryListScreen(
               onTapped: (String storyId) {
                 selectedStory = storyId;
+                notifyListeners();
+              },
+              onLogout: () {
+                isLoggedIn = false;
+                notifyListeners();
+              },
+              toFormScreen: () {
+                isForm = true;
                 notifyListeners();
               },
             )),
