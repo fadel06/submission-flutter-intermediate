@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:submission_flutter_intermediate/db/auth_repository.dart';
-import 'package:submission_flutter_intermediate/screen/form_screen.dart';
+import 'package:submission_flutter_intermediate/screen/story_create_screen.dart';
 
 import '../screen/login_screen.dart';
 import '../screen/register_screen.dart';
@@ -13,6 +13,7 @@ class MyRouteDelegate extends RouterDelegate
   final GlobalKey<NavigatorState> _navigatorKey;
   final AuthRepository authRepository;
   bool isForm = false;
+  bool isCamera = false;
 
   MyRouteDelegate(this.authRepository)
       : _navigatorKey = GlobalKey<NavigatorState>() {
@@ -49,6 +50,7 @@ class MyRouteDelegate extends RouterDelegate
         isRegister = false;
         selectedStory = null;
         isForm = false;
+        isCamera = false;
         notifyListeners();
         return true;
       },
@@ -126,7 +128,7 @@ class MyRouteDelegate extends RouterDelegate
         if (isForm)
           MaterialPage(
             key: const ValueKey("FormScreen"),
-            child: FormScreen(
+            child: StoryCreateScreen(
               onSend: () {
                 isForm = false;
                 notifyListeners();

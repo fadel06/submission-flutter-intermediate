@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:submission_flutter_intermediate/api/api_service.dart';
 import 'package:submission_flutter_intermediate/db/auth_repository.dart';
 import 'package:submission_flutter_intermediate/provider/auth_provider.dart';
+import 'package:submission_flutter_intermediate/provider/story_create_provider.dart';
 import 'package:submission_flutter_intermediate/provider/story_list_provider.dart';
 import 'package:submission_flutter_intermediate/routes/page_manager.dart';
 import 'package:submission_flutter_intermediate/routes/route_delegate.dart';
@@ -41,7 +42,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(create: (context) => PageManager()),
         ChangeNotifierProvider(
-            create: (context) => StoryListProvider(apiService: ApiService()))
+            create: (context) => StoryListProvider(apiService: ApiService())),
+        ChangeNotifierProvider(
+            create: (context) => StoryCreateProvider(ApiService())),
       ],
       child: MaterialApp(
         title: 'Story App',

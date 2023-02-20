@@ -7,6 +7,7 @@ import 'package:submission_flutter_intermediate/screen/widgets/loading_view.dart
 import 'package:submission_flutter_intermediate/screen/widgets/story_card.dart';
 
 import '../provider/auth_provider.dart';
+// import '../routes/page_manager.dart';
 import '../routes/page_manager.dart';
 import '../utils/constant.dart';
 
@@ -36,7 +37,7 @@ class StoryListScreen extends StatelessWidget {
                 toFormScreen();
                 final dataString = await pageManager.waitForResult();
                 scaffoldMessengerState.showSnackBar(
-                  SnackBar(content: Text("Berhasil mengupload story")),
+                  SnackBar(content: Text(dataString)),
                 );
               },
               icon: const Icon(Icons.add_rounded))
